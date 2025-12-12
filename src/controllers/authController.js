@@ -1,0 +1,87 @@
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+const User = require("../models/user")
+const generateToken = require("../utils/generateToken")
+
+const register =  async(req, res) => {
+    try{
+        const {firstName, lastName, username, password, role} = req.body;
+        const existingUser = await User.findOne({ username })
+
+        // Username validation
+        if(existingUser){
+            return res.status(400).json({message: 'Username already in use!'})
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10)
+        const newUser = new User({
+            firstName,
+            lastName, 
+            username, 
+            password: hashedPassword,
+            role: role || 'student'
+        })
+        await newUser.save();
+        console.log(`User registered successfully. ID: ${newUser._id}, Role: ${newUser.role}`);
+
+        // Generate the token using the id and role
+        const token = generateToken(newUser._id, newUser.role);
+
+        console.log('Sending success response to client.');
+        res.json({
+            token,
+            user: {
+                id: newUser._id,
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                username: newUser.username,
+                role: newUser.role
+            }
+        })
+    }
+    catch(error){
+        console.error('User registation failed: ', error)
+        res.status(500).json({message: 'User registration failed!'})
+    }
+
+}
+
+const login = async(req, res) => {
+    try{
+        const {username, password} = req.body;
+        const user = await User.findOne({username})
+
+        if(!user){
+            return res.status(404).json({message: 'Invalid credential!'})
+        }
+
+        const isMatchPassword = await bcrypt.compare(password, user.password)
+
+        if(!isMatchPassword){
+            return res.status(400).json({message: 'Invalid password!'})
+        }
+
+        // Generate the token using the id and role
+        const token = generateToken(user._id, user.role);
+
+        res.json({
+            token,
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                username: user.username,
+                role: user.role
+            }
+        })
+
+    }catch(error){
+        console.error("Login failed: ", error)
+        res.status(500).json({message: 'Login failed!'})
+    }    
+}
+
+module.exports = {
+    register,
+    login
+}
