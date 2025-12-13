@@ -2,33 +2,41 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const User = require("../models/user")
 const generateToken = require("../utils/generateToken")
+const validateRegister = require("../utils/validators/userValidator")
 
 const register =  async(req, res) => {
     try{
-        const {firstName, lastName, username, password, role} = req.body;
-        const existingUser = await User.findOne({ username })
+        // Validate user inputs
+        const error = validateRegister(req.body)
+            if (error) {
+                return res.status(400).json({ message: error })
+            }
+
+        const {firstName, lastName, username, password, role} = req.body
 
         // Username validation
+        const existingUser = await User.findOne({ username })
         if(existingUser){
             return res.status(400).json({message: 'Username already in use!'})
         }
 
+        // Password hashing
         const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = new User({
             firstName,
             lastName, 
-            username, 
+            username,
             password: hashedPassword,
             role: role || 'student'
         })
         await newUser.save();
-        console.log(`User registered successfully. ID: ${newUser._id}, Role: ${newUser.role}`);
+        console.log(`User registered successfully. ID: ${newUser._id}, Role: ${newUser.role}`)
 
         // Generate the token using the id and role
-        const token = generateToken(newUser._id, newUser.role);
+        const token = generateToken(newUser._id, newUser.role)
 
-        console.log('Sending success response to client.');
-        res.json({
+        console.log('Sending success response to client.')
+        res.status(201).json({
             token,
             user: {
                 id: newUser._id,
@@ -62,9 +70,9 @@ const login = async(req, res) => {
         }
 
         // Generate the token using the id and role
-        const token = generateToken(user._id, user.role);
+        const token = generateToken(user._id, user.role)
 
-        res.json({
+        res.status(200).json({
             token,
             user: {
                 id: user._id,
