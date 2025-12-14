@@ -1,4 +1,5 @@
 const Course = require("../models/course")
+const { findCourseExist } = require("./findCourseExist")
 
 /**
  * Fetch course by ID and check if the current user is the owner of course (instructor).
@@ -12,13 +13,8 @@ const Course = require("../models/course")
 
 const fetchCourseAndAuthorize = async(courseId, user) => {
 
-    const fetchCourse = await Course.findById(courseId);
-    if (!fetchCourse){
-        console.error(`Course not found with ID: ${courseId}`)
-        const error = new Error('Course not found!')
-        error.status = 404
-        throw error
-    }
+    // Find course is exists
+    const fetchCourse = await findCourseExist(courseId);
 
     //  Only the instructor can delete / update who posted courses
     const instructorId = user.id;

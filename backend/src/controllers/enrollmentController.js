@@ -1,4 +1,4 @@
-const Course = require("../models/course")
+const { findCourseExist } = require("../services/findCourseExist")
 const Enrollment = require("../models/enrollment")
 
 const studentEnrollment = async(req, res) => {
@@ -6,14 +6,8 @@ const studentEnrollment = async(req, res) => {
         const studentId = req.user.id;
         const { courseId } = req.body;
 
-        // Validate course
-        const exsitingCourse = await Course.findById(courseId);
-        if(!exsitingCourse){
-            return res.status(404).json({
-                success: false,
-                message: 'Course not found!'
-            })
-        }
+        // Find course is exists
+        const fetchCourse = await findCourseExist(courseId);
 
         let enrollment = await Enrollment.findOne({ studentId, courseId});
 
