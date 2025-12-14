@@ -4,6 +4,7 @@ const dbConnect = require("./config/dbConnection")
 const authRoutes = require("./routes/authRoutes")
 const courseRoutes = require("./routes/courseRoutes")
 const enrollmentRoutes = require("./routes/enrollmentRoutes")
+const openaiRoutes = require("./routes/openaiRoutes")
 
 dbConnect()
 
@@ -20,6 +21,9 @@ app.use("/api/course", courseRoutes)
 
 // Enrollment routes
 app.use("/api/enrollment", enrollmentRoutes)
+
+// Openai routes
+app.use("/api/recommend", openaiRoutes)
 
 // Start the server
 const PORT = process.env.PORT || 7002
