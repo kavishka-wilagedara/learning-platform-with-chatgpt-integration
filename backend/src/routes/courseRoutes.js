@@ -34,14 +34,14 @@ router.get(
 router.delete(
     "/delete/:id",
     verifyToken,
-    authorizeRoles('instructor'),
+    authorizeRoles('instructor'),   // Only instructor can delete who posted course
     deleteCourseByInstructor
 )
 
 router.patch(
     "/update/:id",
     verifyToken,
-    authorizeRoles('instructor'),
+    authorizeRoles('instructor'),   // Only instructor can update who posted course
     updateCourseByInstructor
 )
 
