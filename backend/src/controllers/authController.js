@@ -1,18 +1,18 @@
 const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
 const User = require("../models/user")
 const generateToken = require("../utils/generateToken")
-const validateRegister = require("../utils/validators/userValidator")
+const {validateRegister} = require("../utils/validators/userValidator")
 
 const register =  async(req, res) => {
     try{
         // Validate user inputs
         const error = validateRegister(req.body)
             if (error) {
+                console.error('error', error)
                 return res.status(400).json({ message: error })
             }
 
-        const {firstName, lastName, username, password, role} = req.body
+        const {firstname, lastname, username, password, role} = req.body
 
         // Username validation
         const existingUser = await User.findOne({ username })
@@ -23,13 +23,13 @@ const register =  async(req, res) => {
         // Password hashing
         const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = new User({
-            firstName,
-            lastName, 
+            firstname,
+            lastname, 
             username,
             password: hashedPassword,
             role: role || 'student'
         })
-        await newUser.save();
+        await newUser.save()
         console.log(`User registered successfully. ID: ${newUser._id}, Role: ${newUser.role}`)
 
         // Generate the token using the id and role
@@ -40,8 +40,8 @@ const register =  async(req, res) => {
             token,
             user: {
                 id: newUser._id,
-                firstName: newUser.firstName,
-                lastName: newUser.lastName,
+                firstname: newUser.firstname,
+                lastname: newUser.lastname,
                 username: newUser.username,
                 role: newUser.role
             }
