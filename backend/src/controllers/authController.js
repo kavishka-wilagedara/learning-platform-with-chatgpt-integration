@@ -76,12 +76,13 @@ const login = async(req, res) => {
             token,
             user: {
                 id: user._id,
-                firstName: user.firstName,
-                lastName: user.lastName,
+                firstname: user.firstname,
+                lastname: user.lastname,
                 username: user.username,
                 role: user.role
             }
         })
+        console.log(`Login successfully. ID: ${user._id}, Role: ${user.role}`)
 
     }catch(error){
         console.error("Login failed: ", error)
