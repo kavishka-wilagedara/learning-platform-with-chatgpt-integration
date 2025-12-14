@@ -1,7 +1,8 @@
 const express = require("express")
 const { 
     studentEnrollment,
-    studentUnenrollment
+    studentUnenrollment,
+    getAllEnrolledCoursesByStudent
  } = require("../controllers/enrollmentController")
 const router = express.Router()
 const { verifyToken } = require("../middlewares/authMiddleware")
@@ -19,6 +20,13 @@ router.patch(
     verifyToken,
     authorizeRoles('student'),  // Only student can enroll the course
     studentUnenrollment
+)
+
+router.get(
+    "/student/courses",
+    verifyToken,
+    authorizeRoles('student'),  // Only student can enroll the course
+    getAllEnrolledCoursesByStudent
 )
 
 module.exports = router

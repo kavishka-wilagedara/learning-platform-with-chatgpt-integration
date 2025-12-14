@@ -1,5 +1,6 @@
 const { findCourseExist } = require("../services/findCourseExist")
-const Enrollment = require("../models/enrollment")
+const Enrollment = require("../models/enrollment");
+const course = require("../models/course");
 
 const studentEnrollment = async(req, res) => {
     try{
@@ -109,11 +110,60 @@ const studentUnenrollment = async(req, res) => {
     
 }
 
-const getAllCoursesByStudent = async(req, res) => {
-    
+const getAllEnrolledCoursesByStudent = async(req, res) => {
+
+    try{
+        const studentId = req.user.id;
+
+        const enrollments = await Enrollment.find({
+            studentId,
+            status: "enrolled"
+        })
+        .populate({
+            path: 'courseId',
+            select: 'title description content instructorId',
+            populate: {
+                path: 'instructorId',
+                select: 'firstname lastname'
+            }
+        })
+        .lean();
+
+        // Map response fields
+        const enrolledCoursesResponse = enrollments.map((enrollment) => ({
+            enrollmentId: enrollment._id,
+            course: {
+                id: enrollment.courseId._id,
+                title: enrollment.courseId.title,
+                description: enrollment.courseId.description,
+                content: enrollment.courseId.content,
+            },
+            instructor: {
+                id: enrollment.courseId.instructorId._id,
+                firstname: enrollment.courseId.instructorId.firstname,
+                lastname: enrollment.courseId.instructorId.lastname
+            }
+        }))
+
+        res.status(200).json({
+            success: true,
+            count: enrolledCoursesResponse.length,
+            data: enrolledCoursesResponse
+        });
+    }
+
+    catch (error) {
+    console.error('Failed to fetch enrolled courses', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch enrolled courses'
+    });
+  }
+
 }
 
 module.exports = {
     studentEnrollment,
-    studentUnenrollment
+    studentUnenrollment,
+    getAllEnrolledCoursesByStudent
 }
