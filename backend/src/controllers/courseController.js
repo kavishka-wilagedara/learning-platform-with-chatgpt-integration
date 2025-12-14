@@ -14,12 +14,13 @@ const createCourse = async(req, res) => {
         }
 
         const { title, description, content, isPublished } = req.body
-        const instructor = req.user.id
+        const instructorId = req.user.id
+        console.log('Instructor: ', instructorId)
 
         const newCourse = await Course.create({
             title,
             description,
-            instructor,
+            instructorId,
             content,
             isPublished: isPublished ?? true
         })
@@ -32,7 +33,7 @@ const createCourse = async(req, res) => {
                 id: newCourse._id,
                 title: newCourse.title,
                 description: newCourse.description,
-                instructor: newCourse.instructor,
+                instructorId: newCourse.instructorId,
                 content: newCourse.content,
                 isPublished: newCourse.isPublished
             }
@@ -51,8 +52,8 @@ const createCourse = async(req, res) => {
 const getAllPublishedCourses = async(req, res) => {
     try {
     const courses = await Course.find({isPublished: true})
-        .select('title description instructor content')
-        .populate('instructor', 'firstname lastname')
+        .select('title description instructorId content')
+        .populate('instructorId', 'firstname lastname')
         .lean()
 
     res.status(200).json({
