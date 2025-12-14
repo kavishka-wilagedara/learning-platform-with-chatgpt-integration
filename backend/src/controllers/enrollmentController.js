@@ -10,6 +10,13 @@ const studentEnrollment = async(req, res) => {
         // Find course is exists
         const fetchCourse = await findCourseExist(courseId);
 
+        if(!fetchCourse.isPublished){
+            return res.status(400).json({
+                success: false,
+                message: 'Course is not available at the moment!'
+            })
+        }
+
         let enrollment = await Enrollment.findOne({ studentId, courseId});
 
         // Already enrolled
