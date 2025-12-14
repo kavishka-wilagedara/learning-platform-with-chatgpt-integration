@@ -59,9 +59,61 @@ const studentEnrollment = async(req, res) => {
 }
 
 const studentUnenrollment = async(req, res) => {
+
+    try{
+
+        const studentId = req.user.id;
+        const { courseId } = req.body;
+
+        // Find course is exists
+        const fetchCourse = await findCourseExist(courseId);
+
+        let enrollment = await Enrollment.findOne({ studentId, courseId});
+
+        if(!enrollment){
+            return res.status(400).json({
+                success: false,
+                message: 'You have not enroll to this course!'
+            })
+        }
+
+        // Already dropped
+        if (enrollment && enrollment.status === 'dropped'){
+            return res.status(400).json({
+                success: false,
+                message: 'You are already dropped this course!'
+            })
+        }
+
+        if (enrollment && enrollment.status === 'enrolled'){
+            enrollment.status = 'dropped';
+            await enrollment.save();
+
+            console.log(`Dropped course | Student ID: ${studentId}, Course ID: ${courseId}`)
+            return res.status(200).json({
+                success: true,
+                message: 'Dropped course successfully!',
+                enrollment
+            })
+        }
+    }
+
+    catch(error){
+        console.error('Course droping failed: ', error)
+
+        return res.status(500).json({
+            success: false,
+            message: 'Course droping failed'
+        })
+    }
+    
+}
+
+const getAllCoursesByStudent = async(req, res) => {
     
 }
 
 module.exports = {
-    studentEnrollment
+    studentEnrollment,
+    studentUnenrollment
 }
