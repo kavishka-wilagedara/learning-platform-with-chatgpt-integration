@@ -153,10 +153,21 @@ const updateCourseByInstructor = async(req, res) => {
         await fetchCourse.save();
         console.log(`Course updated successfully | ID: ${fetchCourse._id}`)
 
+        // Map response fields
+        const updatedResponse = {
+            id: fetchCourse._id,
+            title: fetchCourse.title,
+            description: fetchCourse.description,
+            content: fetchCourse.content,
+            createdAt: fetchCourse.createdAt,
+            updatedAt: fetchCourse.updatedAt
+            
+        }
+
         res.status(200).json({
             success: true,
             message: "Course updated successfully",
-            data: fetchCourse
+            data: updatedResponse
         });
     }
 
