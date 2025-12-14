@@ -8,7 +8,9 @@
 
 const applyCourseUpdates = (document, newData, allowedFields) => {
   allowedFields.forEach((field) => {
+      if (newData[field] !== undefined) {
       document[field] = newData[field];
+    }
   });
 };
 
