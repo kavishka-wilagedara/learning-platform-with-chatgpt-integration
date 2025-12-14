@@ -70,7 +70,34 @@ const getAllPublishedCourses = async(req, res) => {
         message: 'Failed to fetch courses' }); }
 }
 
+const getAllCoursesByInsructorId = async(req, res) => {
+
+    try{
+        const instructorId = req.user.id
+
+        const fetchedCourses = await Course.find({instructorId: instructorId})
+            .select('title description content isPublished createdAt updatedAt')
+            .lean();
+
+        console.log(`Courses fetched | instructorId: ${instructorId}, count: ${fetchedCourses.length}`)
+        return res.status(200).json({
+            success: true,
+            count: fetchedCourses.length,
+            data: fetchedCourses
+        })
+    }
+    catch(error){
+        console.error('Failed to fetch course by instructor: ', error)
+
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to fetch course by instructor'
+        })
+    }
+}
+
 module.exports = {
     createCourse,
-    getAllPublishedCourses
+    getAllPublishedCourses,
+    getAllCoursesByInsructorId
 }

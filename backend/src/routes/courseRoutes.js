@@ -4,6 +4,7 @@ const { getAllPublishedCourses } = require("../controllers/courseController")
 const router = express.Router()
 const { verifyToken } = require("../middlewares/authMiddleware")
 const { authorizeRoles } = require("../middlewares/roleMiddleware")
+const { getAllCoursesByInsructorId } = require("../controllers/courseController")
 
 router.post(
     "/create",
@@ -12,10 +13,18 @@ router.post(
     createCourse
 );
 
-router.get("/publish/all",
+router.get(
+    "/publish/all",
     verifyToken,
-    authorizeRoles('student'),   // Only students visible all published courses
+    authorizeRoles('student'),  // Only students visible all published courses
     getAllPublishedCourses
 );
+
+router.get(
+    "/instructor/all",
+    verifyToken,
+    authorizeRoles('instructor'),   // Only instructors visible all published courses by them self
+    getAllCoursesByInsructorId
+)
 
 module.exports = router
