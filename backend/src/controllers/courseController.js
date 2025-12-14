@@ -1,12 +1,13 @@
 const Course = require("../models/course")
-const {validateCourseCreate} = require("../utils/validators/courseValidator")
+const {validateCourseCreateOrUpdate} = require("../utils/validators/courseValidator")
 const { fetchCourseAndAuthorize } = require("../services/courseChangesAuthorization")
+const { applyCourseUpdates } = require("../services/courseUpdate")
 
 const createCourse = async(req, res) => {
 
     try{
         // Validate course inputs
-        const error = validateCourseCreate(req.body)
+        const error = validateCourseCreateOrUpdate(req.body, false)
         if(error){
             return res.status(400).json({
                 success: false,
@@ -102,7 +103,7 @@ const deleteCourseByInstructor = async(req, res) => {
         const courseId = req.params.id;
         const loggedUser = req.user;
 
-        // Fetch and authorize 
+        // Fetch and authorize before delete
         const fetchCourse = await fetchCourseAndAuthorize(courseId, loggedUser);
         
         // Delete course
@@ -123,11 +124,56 @@ const deleteCourseByInstructor = async(req, res) => {
     }
 }
 
+const updateCourseByInstructor = async(req, res) => {
+    try{
+        const courseId = req.params.id;
+        const loggedUser = req.user;
 
+        // Validate course inputs
+        const error = validateCourseCreateOrUpdate(req.body)
+        if(error){
+            return res.status(400).json({
+                success: false,
+                message: error
+            })
+        }
+
+        // Fetch and authorize before update
+        const fetchCourse = await fetchCourseAndAuthorize(courseId, loggedUser);
+
+        // Allowed only update required fields
+        applyCourseUpdates(fetchCourse, req.body, [
+            "title",
+            "description",
+            "content",
+            "isPublished"
+        ])
+
+        // Save updated course
+        await fetchCourse.save();
+        console.log(`Course updated successfully | ID: ${fetchCourse._id}`)
+
+        res.status(200).json({
+            success: true,
+            message: "Course updated successfully",
+            data: fetchCourse
+        });
+    }
+
+    catch(error){
+        console.error('Failed to update course', error)
+
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to update course!'
+        })
+    }
+}
 
 module.exports = {
     createCourse,
     getAllPublishedCourses,
     getAllCoursesByInsructorId,
-    deleteCourseByInstructor
+    deleteCourseByInstructor,
+    updateCourseByInstructor
 }

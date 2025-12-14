@@ -3,7 +3,8 @@ const { createCourse } = require("../controllers/courseController")
 const { 
     getAllPublishedCourses,
     getAllCoursesByInsructorId,
-    deleteCourseByInstructor
+    deleteCourseByInstructor,
+    updateCourseByInstructor
 } = require("../controllers/courseController")
 const router = express.Router()
 const { verifyToken } = require("../middlewares/authMiddleware")
@@ -36,5 +37,13 @@ router.delete(
     authorizeRoles('instructor'),
     deleteCourseByInstructor
 )
+
+router.patch(
+    "/update/:id",
+    verifyToken,
+    authorizeRoles('instructor'),
+    updateCourseByInstructor
+)
+
 
 module.exports = router
