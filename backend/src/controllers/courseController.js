@@ -1,5 +1,6 @@
 const Course = require("../models/course")
 const {validateCourseCreate} = require("../utils/validators/courseValidator")
+const { fetchCourseAndAuthorize } = require("../services/courseChangesAuthorization")
 
 const createCourse = async(req, res) => {
 
@@ -99,27 +100,12 @@ const getAllCoursesByInsructorId = async(req, res) => {
 const deleteCourseByInstructor = async(req, res) => {
     try{
         const courseId = req.params.id;
+        const loggedUser = req.user;
 
-        const fetchCourse = await Course.findById(courseId);
-        if (!fetchCourse){
-            console.error(`Course not found with ID: ${courseId}`)
-            return res.status(400).json({
-                success: false,
-                message: 'Course not found!'
-            })
-        }
-
-        //  Only the instructor can delete he posted courses
-        const instructorId = req.user.id;
-        const fetchCourseInstructorId = fetchCourse.instructorId.toString()
-        console.log(`Instructor ID: ${instructorId} | fetchCourse Instructor ID: ${fetchCourseInstructorId}`)
-        if(instructorId !== fetchCourseInstructorId){
-            return res.status(403).json({
-                success: false,
-                message: 'Access denied!'
-            })
-        }
-
+        // Fetch and authorize 
+        const fetchCourse = await fetchCourseAndAuthorize(courseId, loggedUser);
+        
+        // Delete course
         await Course.findByIdAndDelete(courseId);
 
         return res.status(200).json({
@@ -136,6 +122,8 @@ const deleteCourseByInstructor = async(req, res) => {
         })
     }
 }
+
+
 
 module.exports = {
     createCourse,
