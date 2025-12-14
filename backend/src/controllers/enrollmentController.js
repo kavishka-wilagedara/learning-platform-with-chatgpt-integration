@@ -1,6 +1,7 @@
 const { findCourseExist } = require("../services/findCourseExist")
 const Enrollment = require("../models/enrollment");
 const course = require("../models/course");
+const { fetchCourseAndAuthorize } = require("../services/courseChangesAuthorization")
 
 const studentEnrollment = async(req, res) => {
     try{
@@ -160,17 +161,64 @@ const getAllEnrolledCoursesByStudent = async(req, res) => {
     }
 
     catch (error) {
-    console.error('Failed to fetch enrolled courses', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch enrolled courses'
-    });
-  }
+        console.error('Failed to fetch enrolled courses', error);
+            
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch enrolled courses'
+        });
+    }
+}
 
+const getAllEnrolledStudentsByCourse = async(req, res) => {
+
+    try{
+
+        const courseId = req.params.id;
+        const loggedUser = req.user;
+
+        const requiredCourse = await fetchCourseAndAuthorize(courseId, loggedUser);
+
+        const enrollments = await Enrollment.find({
+            courseId,
+            status: 'enrolled'
+        })
+        .populate({
+            path: 'studentId',
+            select: 'firstname lastname'
+        })
+        .lean();
+
+        // Map response fields
+        const enrolledStudentsResponse = enrollments.map((enrollment) => ({
+            enrollmentId: enrollment._id,
+            student: {
+                id: enrollment.studentId._id,
+                firstname: enrollment.studentId.firstname,
+                lastname: enrollment.studentId.lastname,
+            }
+        }))
+
+        res.status(200).json({
+            success: true,
+            count: enrolledStudentsResponse.length,
+            data: enrolledStudentsResponse
+        });
+
+    }
+    catch (error) {
+        console.error('Failed to fetch enrolled students', error);
+            
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch enrolled students'
+        });
+    }
 }
 
 module.exports = {
     studentEnrollment,
     studentUnenrollment,
-    getAllEnrolledCoursesByStudent
+    getAllEnrolledCoursesByStudent,
+    getAllEnrolledStudentsByCourse
 }
