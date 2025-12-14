@@ -1,4 +1,4 @@
-const validateCourseCreate = ({ title, description}) => {
+const validateCourseCreateOrUpdate = ({ title, description}) => {
     if(!title || title.trim() === ""){
         return "Title is required"
     }
@@ -11,6 +11,6 @@ const validateCourseCreate = ({ title, description}) => {
 }
 
 module.exports = {
-    validateCourseCreate
+    validateCourseCreateOrUpdate
 }
 
