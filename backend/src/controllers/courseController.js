@@ -96,8 +96,50 @@ const getAllCoursesByInsructorId = async(req, res) => {
     }
 }
 
+const deleteCourseByInstructor = async(req, res) => {
+    try{
+        const courseId = req.params.id;
+
+        const fetchCourse = await Course.findById(courseId);
+        if (!fetchCourse){
+            console.error(`Course not found with ID: ${courseId}`)
+            return res.status(400).json({
+                success: false,
+                message: 'Course not found!'
+            })
+        }
+
+        //  Only the instructor can delete he posted courses
+        const instructorId = req.user.id;
+        const fetchCourseInstructorId = fetchCourse.instructorId.toString()
+        console.log(`Instructor ID: ${instructorId} | fetchCourse Instructor ID: ${fetchCourseInstructorId}`)
+        if(instructorId !== fetchCourseInstructorId){
+            return res.status(403).json({
+                success: false,
+                message: 'Access denied!'
+            })
+        }
+
+        await Course.findByIdAndDelete(courseId);
+
+        return res.status(200).json({
+            success: true,
+            message: 'Course deleted successfully!'
+        })
+    }
+    catch(error){
+        console.error('Failed to delete course', error)
+
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to delete course!'
+        })
+    }
+}
+
 module.exports = {
     createCourse,
     getAllPublishedCourses,
-    getAllCoursesByInsructorId
+    getAllCoursesByInsructorId,
+    deleteCourseByInstructor
 }

@@ -1,15 +1,18 @@
 const express = require("express")
 const { createCourse } = require("../controllers/courseController")
-const { getAllPublishedCourses } = require("../controllers/courseController")
+const { 
+    getAllPublishedCourses,
+    getAllCoursesByInsructorId,
+    deleteCourseByInstructor
+} = require("../controllers/courseController")
 const router = express.Router()
 const { verifyToken } = require("../middlewares/authMiddleware")
 const { authorizeRoles } = require("../middlewares/roleMiddleware")
-const { getAllCoursesByInsructorId } = require("../controllers/courseController")
 
 router.post(
     "/create",
     verifyToken,
-    authorizeRoles('instructor'),
+    authorizeRoles('instructor'),   // Only instructor can create course
     createCourse
 );
 
@@ -25,6 +28,13 @@ router.get(
     verifyToken,
     authorizeRoles('instructor'),   // Only instructors visible all published courses by them self
     getAllCoursesByInsructorId
+)
+
+router.delete(
+    "/delete/:id",
+    verifyToken,
+    authorizeRoles('instructor'),
+    deleteCourseByInstructor
 )
 
 module.exports = router
