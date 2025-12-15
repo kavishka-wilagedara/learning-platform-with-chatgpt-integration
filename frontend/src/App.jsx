@@ -1,7 +1,10 @@
+import './App.css'
+
 function App() {
+
   return (
     <>
-      <h1>Online learning platform</h1>
+      <h1 className='text-7xl text-red-900'>Tailwindcss work</h1>
     </>
   )
 }
