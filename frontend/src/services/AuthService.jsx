@@ -26,3 +26,30 @@ export const loginUser = async(credentials) => {
         throw new Error(message);
     }
 }
+
+export const registerUser = async(userData) => {
+
+    try{
+        const response = await axios.post(
+            `${backendApiUrl}/auth/register`,
+            userData
+        )
+
+        // Store the token for auto logging
+        if (response.data?.token) {
+            localStorage.setItem("token", response.data.token)
+            console.log("Token: ", response.data.token)
+        }
+        
+        return response.data.user
+    }
+    catch(error){
+        // Set backend error
+        const message = 
+            error.response?.data?.message ||
+            error.message ||
+            "Registration failed";
+
+        throw new Error(message);
+    }
+}

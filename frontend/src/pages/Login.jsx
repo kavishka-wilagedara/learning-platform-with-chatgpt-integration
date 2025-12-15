@@ -8,21 +8,21 @@ const Login = () => {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false)
 
     const {login} = useContext(AuthContext)
     const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
         setLoading(true)
 
         try {
-            const user = await loginUser({ username, password });
-            login(user);
+            const user = await loginUser({ username, password })
+            login(user)
 
             toast.success("Login successfull")
-            navigate("/courses");
+            navigate("/courses")
         } 
         catch (error) {
         toast.error(error.message)
@@ -38,8 +38,12 @@ const Login = () => {
                 onSubmit={handleSubmit}
                 className='bg-white p-8 rounded shadow-md w-full max-w-md'
             >
-                <h2 className="text-2xl text-purple-500 font-bold text-center">Welcome Back,</h2>
-                <p className='text-gray-500 text-center mt-2'>Sign in to your account to continue learning</p>
+                <h2 className="text-2xl text-purple-500 font-bold text-center">
+                    Welcome Back,
+                </h2>
+                <p className='text-gray-500 text-center mt-2'>
+                    Sign in to your account to continue learning
+                </p>
             
                 <input
                     type="text"
@@ -63,11 +67,11 @@ const Login = () => {
                     disabled={loading}
                     className="w-full bg-linear-to-r from-blue-600 via-purple-600 to-indigo-700 text-white text-xl font-semibold p-3 rounded"
                 >
-                {loading ? "Logging in..." : "Login"}
+                    {loading ? "Logging in..." : "Login"}
                 </button>
             </form>
         </div>
-    );
-};
+    )
+}
 
 export default Login
