@@ -49,8 +49,28 @@ export const getAllEnrolledCourses = async() => {
         const message = 
             error.response?.data?.message ||
             error.message ||
-            "Failed to fetch enrolles courses, Try again later";
+            "Failed to fetch enrolles courses, Try again later"
 
         throw new Error(message)
+    }
+}
+
+export const enrollCourse = async(courseId) => {
+
+    try {
+        const response = await axios.post(
+            `${backendApiUrl}/enrollment/student`, 
+            { courseId },
+            { headers: authHeader() }
+        )
+
+        return response.data
+    }
+    catch (error) {
+        const message =
+        error.response?.data?.message ||
+        "Enrollment failed. Try again later.";
+
+        throw new Error(message);
     }
 }
