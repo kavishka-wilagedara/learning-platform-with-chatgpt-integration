@@ -34,6 +34,12 @@ const StudentLayout = () => {
           >
             Enrolled Courses
           </Link>
+          <Link
+            to="/recommend"
+            className="px-3 py-2 rounded hover:bg-white hover:text-black"
+          >
+            OpenAI Recommendation
+          </Link>
           <button
             onClick={handleLogout}
             className="mt-auto px-3 py-2 rounded bg-red-500 hover:bg-red-600"
