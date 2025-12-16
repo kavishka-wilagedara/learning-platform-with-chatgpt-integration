@@ -25,7 +25,7 @@ const createCourse = async(req, res) => {
             description,
             instructorId,
             content,
-            isPublished: typeof isPublished === "boolean" ? isPublished : false,
+            isPublished: isPublished ?? true
         })
         console.log(`Course created successfully | ID: ${newCourse._id}, Title: ${newCourse.title}`)
 
