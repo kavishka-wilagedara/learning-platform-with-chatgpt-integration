@@ -21,8 +21,15 @@ const Login = () => {
             const user = await loginUser({ username, password })
             login(user)
 
+            if (user.role === "instructor") {
+                navigate("/all")
+            } 
+            else {
+                navigate("/courses")
+            }
+
             toast.success("Login successfull")
-            navigate("/courses")
+            
         } 
         catch (error) {
         toast.error(error.message)
