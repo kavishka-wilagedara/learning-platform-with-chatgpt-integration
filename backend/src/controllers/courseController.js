@@ -133,6 +133,8 @@ const updateCourseByInstructor = async(req, res) => {
         const courseId = req.params.id;
         const loggedUser = req.user;
 
+        console.log("Update course id: ", courseId)
+
         // Validate course inputs
         const error = validateCourseCreateOrUpdate(req.body)
         if(error){
@@ -163,6 +165,7 @@ const updateCourseByInstructor = async(req, res) => {
             title: fetchCourse.title,
             description: fetchCourse.description,
             content: fetchCourse.content,
+            isPublished: fetchCourse.isPublished,
             createdAt: fetchCourse.createdAt,
             updatedAt: fetchCourse.updatedAt
             
