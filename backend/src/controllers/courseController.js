@@ -2,6 +2,7 @@ const Course = require("../models/course")
 const {validateCourseCreateOrUpdate} = require("../utils/validators/courseValidator")
 const { fetchCourseAndAuthorize } = require("../services/courseChangesAuthorization")
 const { applyCourseUpdates } = require("../services/courseUpdate")
+const { deleteAllEnrollments } = require("../services/deleteEnrollment")
 
 const createCourse = async(req, res) => {
 
@@ -105,6 +106,9 @@ const deleteCourseByInstructor = async(req, res) => {
 
         // Fetch and authorize before delete
         const fetchCourse = await fetchCourseAndAuthorize(courseId, loggedUser);
+
+        // Remove enrollments history
+        deleteAllEnrollments(courseId)
         
         // Delete course
         await Course.findByIdAndDelete(courseId);
