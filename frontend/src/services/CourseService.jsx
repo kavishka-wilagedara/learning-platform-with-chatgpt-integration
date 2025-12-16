@@ -13,7 +13,7 @@ export const allAvailableCourses = async() => {
         )
         
         if (response.data.count === 0) {
-            console.warn("No courses available.");
+            console.warn("No courses available.")
         }
 
         return response.data.data
@@ -23,7 +23,7 @@ export const allAvailableCourses = async() => {
         const message = 
             error.response?.data?.message ||
             error.message ||
-            "Failed to fetch courses, Try again later";
+            "Failed to fetch courses, Try again later"
 
         throw new Error(message);
     }
@@ -39,9 +39,9 @@ export const getAllEnrolledCourses = async() => {
         )
 
         if (response.data.count === 0) {
-            console.warn("No courses available.");
+            console.warn("No courses available.")
         }
-
+        
         return response.data.data
     }
     catch(error){
@@ -51,6 +51,6 @@ export const getAllEnrolledCourses = async() => {
             error.message ||
             "Failed to fetch enrolles courses, Try again later";
 
-        throw new Error(message);
+        throw new Error(message)
     }
 }
