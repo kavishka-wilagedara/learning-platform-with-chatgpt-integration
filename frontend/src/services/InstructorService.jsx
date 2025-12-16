@@ -47,6 +47,24 @@ export const deleteCourse = async(courseId) => {
     }
 }
 
-export const updateCourse = async() => {
-    
-}
+export const updateCourse = async (editingCourse, payload) => {
+  
+    try {
+        console.log("Course Id: ", editingCourse)
+        const response = await axios.patch(
+            `${backendApiUrl}/course/update/${editingCourse}`,
+            payload,
+            { headers: authHeader() }
+        );
+
+        console.log("Updated course | ", response.data.data)
+        return response.data;
+    } 
+    catch (error) {
+        const message =
+            error.response?.data?.message ||
+            "Updaing failed, Try again later"
+
+        throw new Error(message);
+    }
+};
