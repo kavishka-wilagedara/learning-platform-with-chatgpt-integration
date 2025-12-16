@@ -1,0 +1,52 @@
+import axios from "axios";
+import { authHeader } from "./AuthService";
+
+const backendApiUrl = import.meta.env.VITE_BACKEND_API_URL
+
+export const getAllInstructorCourses = async() => {
+
+    try{
+
+        const response = await axios.get(
+            `${backendApiUrl}/course/instructor/all`,
+            {headers: authHeader()}
+        )
+
+        if (response.data.count === 0){
+            console.warn("No posted courses available.")
+        }
+
+        return response.data.data
+    }
+    catch (error) {
+        const message =
+            error.response?.data?.message ||
+            "Failed to fetch instructor courses";
+
+        throw new Error(message);
+    }
+}
+
+export const deleteCourse = async(courseId) => {
+
+    try{
+        const response = await axios.delete(
+            `${backendApiUrl}/course/delete/${courseId}`,
+            {headers: authHeader()} 
+        )
+
+        console.log("Delete status: ", response.data.message)
+        return response.data.message
+    }
+    catch (error) {
+        const message =
+            error.response?.data?.message ||
+            "Deleting failed, Try again later"
+
+        throw new Error(message);
+    }
+}
+
+export const updateCourse = async() => {
+    
+}
