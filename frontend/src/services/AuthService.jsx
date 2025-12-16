@@ -53,3 +53,12 @@ export const registerUser = async(userData) => {
         throw new Error(message);
     }
 }
+
+// Attach token to header
+export const authHeader = () => {
+  const token = localStorage.getItem("token")   // JWT stored after login and register
+  if (token) {
+    return { authorization: `Bearer ${token}` }
+  }
+  return {};
+};
