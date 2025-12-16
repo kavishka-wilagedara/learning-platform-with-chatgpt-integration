@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { allAvailableCourses, getAllEnrolledCourses } from '../services/CourseService'
+import { allAvailableCourses, enrollCourse, getAllEnrolledCourses } from '../services/CourseService'
 import toast from 'react-hot-toast'
 import CourseCard from '../components/CourseCard'
 
 const Courses = () => {
 
     const [courses, setCourses] = useState([])
-    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
 
@@ -26,13 +25,14 @@ const Courses = () => {
                 })); 
 
                 setCourses(coursesWithStatus)
+                console.log("Courser with status: ", coursesWithStatus)
 
                 if (coursesWithStatus.length === 0){
-                    toast.info("No courses available at the moment.")
+                    toast("No courses available at the moment.")
                 }
             } 
             catch (error) {
-            toast.error(error.message);
+                toast.error(error.message);
             }
         }
 
@@ -42,6 +42,23 @@ const Courses = () => {
 
     const handleEnroll = async(courseId) => {
 
+        try{
+            const response = await enrollCourse(courseId)
+
+            // Student response after succesfull enrollment
+            toast.success(response.message)
+
+            setCourses((prev) => 
+                prev.map((course) =>
+                    course._id === courseId
+                    ? {...course, enrolled: true}
+                    : course
+                )
+            )
+        }
+        catch(error){
+            toast.error(error.message);
+        }
         
     }
 
