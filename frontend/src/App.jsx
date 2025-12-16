@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import StudentLayout from "./components/StudentLayout";
 import PrivateRoute from "./components/PrivateRoutes";
 import Courses from "./pages/Courses";
+import GetEnrolledCourses from "./pages/GetEnrolledCourses";
 
 function App() {
 
@@ -19,7 +20,7 @@ function App() {
 
         <Route element={<PrivateRoute roles={['student']}><StudentLayout /></PrivateRoute>}>
           <Route path="/courses" element= {<Courses/>}/>
-          <Route path="/enrolled" />
+          <Route path="/enrolled" element={<GetEnrolledCourses/>}/>
         </Route>
 
       </Routes>
