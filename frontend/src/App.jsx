@@ -9,6 +9,7 @@ import GetEnrolledCourses from "./pages/GetEnrolledCourses";
 import OpenAiRecommend from "./pages/OpenAiRecommend";
 import InstructorLayout from "./components/InsructorLayout";
 import InstructorCourses from "./pages/InstructorCourses";
+import CreateCourse from "./pages/CreateCourse";
 
 function App() {
 
@@ -30,7 +31,7 @@ function App() {
 
         {/* Instructor private routes */}
         <Route element={<PrivateRoute roles={['instructor']}><InstructorLayout /></PrivateRoute>}>
-          <Route path="/create"/>
+          <Route path="/create" element={<CreateCourse/>}/>
           <Route path="/all" element={<InstructorCourses/>}/>
         </Route>
 
