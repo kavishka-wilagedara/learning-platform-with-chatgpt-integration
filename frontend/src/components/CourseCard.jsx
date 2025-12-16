@@ -23,7 +23,7 @@ const CourseCard = ({course, onEnroll}) => {
                 <h3 className="font-bold text-md">
                     Instructor Details
                 </h3>
-                <p className="text-gray-500">{course.instructorId.firstname}{" "}{course.instructorId.lastname}</p>
+                <p className="text-gray-500">{course.instructorId.firstname} {course.instructorId.lastname}</p>
             </div>
 
             {course.enrolled ? (
