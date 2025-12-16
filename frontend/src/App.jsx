@@ -2,6 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Register from "./pages/Register";
+import StudentLayout from "./components/StudentLayout";
+import PrivateRoute from "./components/PrivateRoutes";
+import Courses from "./pages/Courses";
 
 function App() {
 
@@ -9,9 +12,15 @@ function App() {
     <Router>
       <Routes>
 
-      <Route path="/" element= {<Home />}/>
-      <Route path="/login" element= {<Login />}/>
-      <Route path="/register" element= {<Register />}/>
+        {/* Public routes */}
+        <Route path="/" element= {<Home />}/>
+        <Route path="/login" element= {<Login />}/>
+        <Route path="/register" element= {<Register />}/>
+
+        <Route element={<PrivateRoute roles={['student']}><StudentLayout /></PrivateRoute>}>
+          <Route path="/courses" element= {<Courses/>}/>
+          <Route path="/enrolled" />
+        </Route>
 
       </Routes>
     </Router>
