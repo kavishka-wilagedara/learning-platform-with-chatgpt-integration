@@ -1,6 +1,7 @@
 const Course = require('../models/course');
 
 const findCourseExist = async(courseId) => {
+    console.log("Course Id: ", courseId)
     const exsitingCourse = await Course.findById(courseId);
         if(!exsitingCourse){
             const error = new Error('Course not found!');
