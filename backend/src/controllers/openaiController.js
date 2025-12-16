@@ -14,7 +14,7 @@ const getRecommendations = async(req, res) => {
 
     try{
 
-        const publishedCourses = await getAllPublishCourses();
+        const publishedCourses = await getAllPublishCourses()
 
         if ( publishedCourses.length === 0){
             return res.status(400).json({ 
@@ -23,7 +23,7 @@ const getRecommendations = async(req, res) => {
             });
         }
 
-        const recommendations = await getCourseRecommendations(userPrompt, publishedCourses);
+        const recommendations = await getCourseRecommendations(userPrompt, publishedCourses)
         res.status(200).json({ 
             success: true,
             recommendations 
