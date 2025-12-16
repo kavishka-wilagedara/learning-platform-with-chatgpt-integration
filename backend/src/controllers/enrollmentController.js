@@ -137,6 +137,8 @@ const getAllEnrolledCoursesByStudent = async(req, res) => {
         })
         .lean();
 
+        console.log("enrollments | ", enrollments)
+
         // Map response fields
         const enrolledCoursesResponse = enrollments.map((enrollment) => ({
             enrollmentId: enrollment._id,
