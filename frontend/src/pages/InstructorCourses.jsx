@@ -10,7 +10,7 @@ const InstructorCourses = () => {
         title: "", 
         description: "", 
         content: "", 
-        isPublished: false 
+        isPublished: "false" 
     });
 
     useEffect(() => {
@@ -45,10 +45,10 @@ const InstructorCourses = () => {
     const startEdit = (course) => {
         setEditingCourse(course._id)
         setEditPayload({
-            title: course.title,
-            description: course.description,
-            content: course.content,
-            isPublished: course.isPublished
+            title: course.title ?? "",
+            description: course.description ?? "",
+            content: course.content ?? "",
+            isPublished: Boolean(course.isPublished),
         });
     };
 
@@ -62,9 +62,18 @@ const InstructorCourses = () => {
 
     const submitEdit = async () => {
         try {
+
+            const payload = {};
+
+            Object.entries(editPayload).forEach(([key, value]) => {
+                if (value !== "" && value !== null && value !== undefined) {
+                    payload[key] = value;
+                }
+            });
+
             const res = await updateCourse(editingCourse, editPayload)
             setCourses((prev) =>
-            prev.map((c) => (c._id === editingCourse ? res.data : c)))   
+            prev.map((c) => (c._id === editingCourse ? {...c, ...res.data} : c)))   
             setEditingCourse(null);
             toast.success(res.message);
         } 
