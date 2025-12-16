@@ -15,7 +15,7 @@ const GetEnrolledCourses = () => {
                 console.log("Enrolled courses: ", allEnrolledCourses)
 
                 if(allEnrolledCourses.length === 0){
-                    toast.info("You are not enroll with any course yet")
+                    toast("You are not enroll with any course yet")
                 }
             }
             catch (error) {
