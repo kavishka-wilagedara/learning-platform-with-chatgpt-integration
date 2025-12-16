@@ -55,7 +55,7 @@ export const updateCourse = async (editingCourse, payload) => {
             `${backendApiUrl}/course/update/${editingCourse}`,
             payload,
             { headers: authHeader() }
-        );
+        )
 
         console.log("Updated course | ", response.data.data)
         return response.data;
@@ -68,3 +68,25 @@ export const updateCourse = async (editingCourse, payload) => {
         throw new Error(message);
     }
 };
+
+export const createNewCourse = async(courseData) => {
+
+    try{
+        const response = await axios.post(
+            `${backendApiUrl}/course/create`,
+            courseData,
+            { headers: authHeader() }
+        )
+
+        console.log("New course: ", response.data.course)
+        return response.data
+    }
+    catch (error) {
+        const message =
+            error.response?.data?.message ||
+            "Course creating failed, Try again later"
+
+        throw new Error(message);
+    }
+
+}
