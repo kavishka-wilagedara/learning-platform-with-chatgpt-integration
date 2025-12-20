@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { getAllInstructorCourses, deleteCourse, updateCourse } from "../services/InstructorService"
+import { 
+    getAllInstructorCourses, 
+    deleteCourse, 
+    updateCourse,
+    getEnrolledStudents
+} from "../services/InstructorService"
 import toast from "react-hot-toast"
 
 const InstructorCourses = () => {
@@ -11,7 +16,8 @@ const InstructorCourses = () => {
         description: "", 
         content: "", 
         isPublished: "false" 
-    });
+    })
+    const [selectedEnrollments, setSelectedEnrollments] = useState(null)
 
     useEffect(() => {
         const fetchCourses = async () => {  
@@ -82,11 +88,36 @@ const InstructorCourses = () => {
         }
     };
 
-    const viewEnrollments = () => {}
+    const viewEnrollments = async(course) => {
+
+        console.log("Course Id: ", course._id)
+        try{
+            
+            const enrolledStudents = await getEnrolledStudents(course._id)
+
+            console.log("Enrolled Student: ", enrolledStudents)
+            setSelectedEnrollments({
+                courseTitle: course.title,
+                enrolledCount: enrolledStudents.length,
+                data: enrolledStudents.data
+            })
+
+            if(enrolledStudents.count === 0){
+                toast("No students enroll with this course module")
+            }
+        }
+        catch (error) {
+            toast.error(error.message);
+        }
+
+    }
+
+    const closeEnrollments = () => {setSelectedEnrollments(null)}
 
     if (loading) return <p>Loading courses...</p>;
 
     return (
+        
         <div className="p-6">
             {/* Headline */}
             <div className="mb-6 text-center">
@@ -201,6 +232,49 @@ const InstructorCourses = () => {
                     </div>
                 ))}
             </div>
+
+            {/* Enrolled student table */}
+            {selectedEnrollments && (
+                <div className="fixed inset-0 flex items-center justify-center z-100">
+                    <div 
+                        className="absolute inset-0 bg-black/30 backdrop-blur-sm" 
+                        onClick={closeEnrollments}>
+                    </div>
+
+                    {/* Table */}
+                    <div className="relative bg-white rounded-xl shadow-xl max-w-3xl w-full p-6 z-50">
+                        <h2 className="text-2xl font-bold mb-4">{selectedEnrollments.courseTitle} - Enrollments</h2>
+                        <table className="w-full border-collapse">
+                            <thead>
+                                <tr className="bg-gray-100">
+                                    <th className="border p-2">First Name</th>
+                                    <th className="border p-2">Last Name</th>
+                                    <th className="border p-2">Enrollment Times</th>
+                                    <th className="border p-2">Enrollment Date</th>
+                                    <th className="border p-2">Update Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {selectedEnrollments.data.map((e, idx) => (
+                                    <tr key={idx} className="even:bg-gray-50">
+                                        <td className="border p-2">{e.student?.firstname || "-"}</td>
+                                        <td className="border p-2">{e.student?.lastname || "-"}</td>
+                                        <td className="border p-2">{e.enrollmentDetails?.enrollmentCount || "-"}</td>
+                                        <td className="border p-2">{e.enrollmentDetails?.firstEnrolledDate || "-"}</td>
+                                        <td className="border p-2">{e.enrollmentDetails?.lastEnrollmentDate || "-"}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <button
+                            onClick={closeEnrollments}
+                            className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
