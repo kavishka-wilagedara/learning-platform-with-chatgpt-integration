@@ -63,10 +63,24 @@ const Courses = () => {
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {courses.map((course) => (
-                <CourseCard key={course._id} course={course} onEnroll={handleEnroll} />
-            ))}
+        <div className='p-6'>
+
+            {/* Headline */}
+            <div className="mb-6 text-center">
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+                    Available Courses
+                </h1>
+                <p className="text-gray-500 mt-2">
+                    Start your learning journey by enrolling in a course that matches your goals.
+                </p>
+            </div>
+
+            {/* Course card */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {courses.map((course) => (
+                    <CourseCard key={course._id} course={course} onEnroll={handleEnroll} />
+                ))}
+            </div>
         </div>
     )
 }
