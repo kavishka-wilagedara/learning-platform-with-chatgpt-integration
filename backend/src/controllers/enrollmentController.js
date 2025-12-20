@@ -198,6 +198,11 @@ const getAllEnrolledStudentsByCourse = async(req, res) => {
                 id: enrollment.studentId._id,
                 firstname: enrollment.studentId.firstname,
                 lastname: enrollment.studentId.lastname,
+            },
+            enrollmentDetails: {
+                enrollmentCount: enrollment.enrolledTimes,
+                firstEnrolledDate: enrollment.createdAt,
+                lastEnrollmentDate: enrollment.updatedAt
             }
         }))
 
