@@ -12,9 +12,13 @@ const getRecommendations = async(req, res) => {
         });
     }
 
+    console.log("user prompt", userPrompt)
+
     try{
 
         const publishedCourses = await getAllPublishCourses()
+
+        console.log("Published courses: ", publishedCourses)
 
         if ( publishedCourses.length === 0){
             return res.status(400).json({ 
@@ -24,6 +28,8 @@ const getRecommendations = async(req, res) => {
         }
 
         const recommendations = await getCourseRecommendations(userPrompt, publishedCourses)
+
+        console.log("Recommendations: ", recommendations)
         res.status(200).json({ 
             success: true,
             recommendations 
