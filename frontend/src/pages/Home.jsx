@@ -14,13 +14,13 @@ const Home = () => {
                 <h1 className='text-5xl md:text-6xl font-bold mt-15 bg-clip-text text-white'>
                     Online Learning Platform 
                 </h1>
-                <p className='text-2xl text-gray-300 mt-4'>
+                <p className='text-2xl text-gray-200 mt-5'>
                     Discover courses from Beginner to Master level – Skillful & Professional Instructors
                 </p>
             </div>
 
             {/* Image section */}
-            <div className='flex flex-col items-center justify-center'>
+            <div className='flex flex-col items-center justify-center mt-10'>
                 <PiBookOpenTextThin className='w-150 h-80 text-white'/>
             </div>
 
