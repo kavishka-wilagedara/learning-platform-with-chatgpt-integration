@@ -2,40 +2,54 @@ import React from 'react'
 
 const CourseCard = ({course, onEnroll}) => {
     return (
-        <div className='"border rounded p-4 shadow hover:shadow-lg flex flex-col justify-between"'>
-            <div>
+        <div className="group bg-white rounded-2xl shadow-md p-6 flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-xl">
+            <div className="space-y-4">
                 {/* Course name */}
-                <h1 className="font-bold text-3xl">{course.title}</h1>
+                <h1 className="text-2xl font-extrabold text-gray-800">
+                    {course.title}
+                </h1>
 
                 {/* Description */}
-                <h3 className="font-bold text-md text-gray-800 mt-4">
-                    About
-                </h3>
-                <p className="text-gray-500">{course.description}</p>
+                <div>
+                    <h3 className="text-sm font-semibold text-gray-700 uppercase">
+                        About
+                    </h3>
+                    <p className="text-gray-600 text-sm mt-1">
+                        {course.description}
+                    </p>
+                </div>
 
                 {/* Content */}
-                <h3 className="font-bold text-md text-gray-800">
-                    Content
-                </h3>
-                <p className="text-gray-500">{course.content}</p>
+                <div>
+                    <h3 className="text-sm font-semibold text-gray-700 uppercase">
+                        Content
+                    </h3>
+                    <p className="text-gray-6About00 text-sm mt-1">
+                        {course.content}
+                    </p>
+                </div>
 
                 {/* Instructor */}
-                <h3 className="font-bold text-md">
-                    Instructor Details
-                </h3>
-                <p className="text-gray-500">{course.instructorId.firstname} {course.instructorId.lastname}</p>
+                <div className="pt-2 border-t border-gray-100">
+                    <p className="text-sm text-gray-500">
+                        Instructor
+                    </p>
+                    <p className="font-semibold text-gray-800">
+                        {course.instructorId.firstname} {course.instructorId.lastname}
+                    </p>
+                </div>
             </div>
 
             {course.enrolled ? (
-                <span className="mt-4 px-3 py-1 bg-green-500 text-white rounded text-center">
-                    Enrolled
+                <span className="mt-6 inline-block text-center px-4 py-2 rounded-lg bg-green-100 text-green-700 font-semibold">
+                    ✓ Enrolled
                 </span>
             ) : (
                 <button
                     onClick={() => onEnroll(course._id)}
-                    className="mt-4 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="mt-4 w-full px-4 py-2 rounded-lg font-semibold text-white bg-blue-500 hover:bg-blue-700"
                 >
-                    Enroll
+                    Enroll Now
                 </button>
       )}
         </div>
