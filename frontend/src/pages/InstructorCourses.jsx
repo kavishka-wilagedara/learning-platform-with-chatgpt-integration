@@ -110,21 +110,21 @@ const InstructorCourses = () => {
                                     name="title"
                                     value={editPayload.title}
                                     onChange={handleEditChange}
-                                    className="border border-gray rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all duration-200"
                                 />
 
                                 <textarea
                                     name="description"
                                     value={editPayload.description}
                                     onChange={handleEditChange}
-                                    className="border border-gray rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all duration-200"
                                 />
 
                                 <textarea
                                     name="content"
                                     value={editPayload.content}
                                     onChange={handleEditChange}
-                                    className="border border-gray rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all duration-200"
                                 />
 
                                 <label className="flex items-center gap-2">
