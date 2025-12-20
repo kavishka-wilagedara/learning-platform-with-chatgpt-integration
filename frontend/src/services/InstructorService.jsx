@@ -90,3 +90,28 @@ export const createNewCourse = async(courseData) => {
     }
 
 }
+
+export const getEnrolledStudents = async(courseId) => {
+
+    try{
+        console.log("Course ID: ", courseId)
+        const response = await axios.get(
+            `${backendApiUrl}/enrollment/instructor/students/${courseId}`,
+            { headers: authHeader() }
+        )
+
+        if (response.data.count === 0){
+            console.warn("No any students associate with this course.")
+        }
+
+        console.log("Enrolled details | ", response.data.data)
+        return response.data;
+    } 
+    catch (error) {
+        const message =
+            error.response?.data?.message ||
+            "Failed to fetch enrolled students"
+
+        throw new Error(message);
+    }
+}
