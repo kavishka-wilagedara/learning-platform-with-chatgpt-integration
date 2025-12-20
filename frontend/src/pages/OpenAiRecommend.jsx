@@ -5,7 +5,7 @@ import { openAiRecommendations } from "../services/OpenAiService"
 const OpenAiRecommend = () => {
   const [prompt, setPrompt] = useState("")
   const [loading, setLoading] = useState(false)
-  const [recommendations, setRecommendations] = useState("")
+  const [recommendations, setRecommendations] = useState([])
 
   const handleSubmit = async () => {
     if (!prompt.trim()) {
@@ -18,7 +18,8 @@ const OpenAiRecommend = () => {
       setRecommendations("")
 
       const result = await openAiRecommendations(prompt)
-      setRecommendations(result)
+      const parsedResult = typeof result === "string" ? JSON.parse(result) : result;
+      setRecommendations(parsedResult);
 
       toast.success("Recommendations generated!")
     } 
@@ -32,36 +33,63 @@ const OpenAiRecommend = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center p-6">
-      <h1 className="text-3xl font-bold">Add your prompt</h1>
+      <div className="text-center max-w-2xl">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+          AI Course Recommendation
+        </h1>
+        <p className="text-gray-500 mt-2">
+          Tell us your career goal and get personalized course suggestions
+        </p>
+      </div>
 
-      <input
-        type="text"
-        placeholder="Ex: I want to be a Java Developer"
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        className="w-2/3 p-4 border rounded mt-8"
-      />
+      <div className="mt-10 w-full max-w-3xl bg-white rounded-2xl shadow-lg p-6">
+        <label className="block text-sm font-semibold text-gray-700">
+          Your Career Goal
+        </label>
 
-      <button
-        onClick={handleSubmit}
-        disabled={loading}
-        className="bg-green-600 text-white text-lg font-semibold mt-6 py-2 px-5 rounded disabled:opacity-50"
-      >
-        {loading ? "Thinking..." : "Send"}
+        <input
+          type="text"
+          placeholder="Ex: I want to be a Java Developer"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          className="w-full p-4 border border-gray-300 rounded-xl mt-8 focus:ring-4 focus:ring-green-100 focus:border-green-500 outline-none"
+        />
+
+        <button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white text-lg font-semibold py-3 rounded-2xl transition"
+        >
+        {loading ? "Thinking..." : "Get Recommendations"}
       </button>
 
-      {recommendations && (
-        <>
-          <h1 className="text-3xl font-bold mt-10">
-            Suggested Courses by OpenAI
-          </h1>
-
-          <div className="w-2/3 p-6 border rounded mt-6 whitespace-pre-line bg-gray-50">
-            {recommendations}
+      {recommendations && recommendations.length > 0 && (
+        <div className="mt-12 w-full max-w-4xl mx-auto">
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <span className="text-3xl animate-bounce">🤖</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center">
+              Suggested Courses
+            </h2>
           </div>
-        </>
+
+          {/* Recommendations list */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {recommendations.map((rec, idx) => (
+              <div
+                key={idx}
+                  className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100 hover:shadow-2xl transition-shadow duration-300"
+              >
+                <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  {rec.course}
+                </h3>
+                <p className="text-gray-600">{rec.reason}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
+  </div>
   );
 };
 
