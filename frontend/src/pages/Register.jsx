@@ -29,7 +29,12 @@ const Register = () => {
         login(newUser)
 
         toast.success("Registration successfull")
-        navigate("/courses")
+        if(newUser.role == "student"){
+            navigate("/courses")
+        }
+        else{
+            navigate("/all")
+        }
     }
     catch (error) {
         toast.error(error.message)
