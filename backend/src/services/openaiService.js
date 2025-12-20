@@ -1,7 +1,7 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 
 const getCourseRecommendations = async (userPrompt, courses) => {
   try {
@@ -23,20 +23,35 @@ const getCourseRecommendations = async (userPrompt, courses) => {
       2. If multiple courses match, suggest up to 3.
       3. If a course is only vaguely related (e.g., "Statistics" for a "Farmer"), REJECT IT.
       4. If NO course is a professional match for the goal, return ONLY the word: "NO_DIRECT_MATCH".
-      5. If a match exists, provide:
-         Course: [Title]
-         Reason: [One sentence explaining the professional connection]
+      5. If matches exist, return ONLY a valid JSON ARRAY.
+      6. DO NOT include markdown, comments, explanations, or extra text.
+      7. JSON format MUST be exactly:
+
+      [
+        {
+          "course": "Course Title",
+          "reason": "One clear professional reason"
+        }
+      ]
 
       REJECTION EXAMPLES:
       - Goal: "Farmer" vs Course: "Math" -> REJECT (Not direct)
       - Goal: "Chef" vs Course: "Chemistry" -> REJECT (Too abstract)
+
+      IMPORTANT:
+      - Response must be valid JSON.
+      - No trailing commas.
+      - No extra keys.
     `;
 
     const result = await model.generateContent(prompt);
     const responseText = result.response.text().trim();
 
     if (responseText.includes("NO_DIRECT_MATCH")) {
-      return "We currently don't have any courses directly related to your request. Check our catalog for general business or science courses!";
+      return [{
+        course: "No Recommendations",
+        reason: "No recommendation courses for your request"
+      }]
     }
 
     console.log("Response Text: ", responseText)
