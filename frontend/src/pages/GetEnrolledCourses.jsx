@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { getAllEnrolledCourses } from '../services/CourseService'
+import { 
+    getAllEnrolledCourses,
+    unenrollCourse
+ } from '../services/CourseService'
 import toast from 'react-hot-toast'
 
 const GetEnrolledCourses = () => {
@@ -26,7 +29,21 @@ const GetEnrolledCourses = () => {
         fetchedEnrolledCourses()
     }, [])
 
-    const unenroll = () => {}
+    const unenroll = async(coursId) => {
+
+        try{
+            const response = await unenrollCourse(coursId)
+            // Student response after succesfull unenrollment
+            toast.success(response.message)
+
+            setEnrolledCourses(prev =>
+            prev.filter(enrollment => enrollment.course.id !== coursId)
+            )
+        }
+        catch (error) {
+            toast.error(error.message);
+        }
+    }
 
     return (
         <div className="p-6 max-w-7xl mx-auto">
@@ -84,7 +101,7 @@ const GetEnrolledCourses = () => {
 
                         {/* Unenroll button */}
                         <button
-                            onClick={() => unenroll(course._id)}
+                            onClick={() => unenroll(course.id)}
                             className="mt-4 w-full px-4 py-2 rounded-lg font-bold text-white bg-red-400 hover:bg-red-500"
                         >
                             Unenroll Now

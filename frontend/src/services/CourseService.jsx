@@ -74,3 +74,25 @@ export const enrollCourse = async(courseId) => {
         throw new Error(message);
     }
 }
+
+export const unenrollCourse = async(courseId) => {
+
+    console.log("Course Id: ",  courseId)
+
+    try {
+        const response = await axios.patch(
+            `${backendApiUrl}/enrollment/student/drop`, 
+            { courseId },
+            { headers: authHeader() }
+        )
+
+        return response.data
+    }
+    catch (error) {
+        const message =
+        error.response?.data?.message ||
+        "Unerollment failed. Try again later.";
+
+        throw new Error(message);
+    }
+}
