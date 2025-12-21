@@ -1,12 +1,14 @@
 import React, { useState } from "react"
 import toast from "react-hot-toast"
 import { openAiRecommendations } from "../services/OpenAiService"
+import { useNavigate } from 'react-router-dom'
 
 const OpenAiRecommend = () => {
   const [prompt, setPrompt] = useState("")
   const [loading, setLoading] = useState(false)
   const [recommendations, setRecommendations] = useState([])
-
+  const navigate = useNavigate()
+  
   const handleSubmit = async () => {
     if (!prompt.trim()) {
       toast.error("Please enter a prompt")
@@ -29,6 +31,10 @@ const OpenAiRecommend = () => {
     finally {
       setLoading(false);
     }
+  }
+
+  const navigateCourses = () => {
+    navigate('/courses')
   }
 
   return (
@@ -77,7 +83,8 @@ const OpenAiRecommend = () => {
             {recommendations.map((rec, idx) => (
               <div
                 key={idx}
-                  className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100 hover:shadow-2xl transition-shadow duration-300"
+                onClick={navigateCourses}
+                className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100 hover:shadow-2xl transition-shadow duration-300"
               >
                 <h3 className="text-xl font-bold text-gray-800 mb-2">
                   {rec.course}
