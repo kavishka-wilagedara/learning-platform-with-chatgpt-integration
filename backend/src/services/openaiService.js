@@ -57,6 +57,15 @@ const getCourseRecommendations = async (userPrompt, courses) => {
     console.log("Response Text: ", responseText)
     return responseText;
   } catch (error) {
+
+    if (error.status === 429 || error.message.includes("quota")) {
+      console.error("Gemini quota exceeded");
+      return [{
+        course: "AI Temporarily Unavailable",
+        reason: "AI recommendation limit exceeded. Please try later."
+      }];
+    }
+    
     console.error("Gemini API Error:", error.message);
     throw new Error("Could not fetch recommendations.");
   }
