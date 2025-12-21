@@ -83,14 +83,20 @@ const OpenAiRecommend = () => {
             {recommendations.map((rec, idx) => (
               <div
                 key={idx}
-                onClick={navigateCourses}
-                className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100 hover:shadow-2xl transition-shadow duration-300"
+                className="flex flex-col h-full bg-white rounded-2xl shadow-xl p-6 border border-gray-100 hover:shadow-2xl transition-shadow duration-300"
               >
                 <h3 className="text-xl font-bold text-gray-800 mb-2">
                   {rec.course}
                 </h3>
                 <p className="text-gray-600">{rec.reason}</p>
+                <button
+                  onClick={navigateCourses}
+                  className="mt-auto self-end text-blue-600 hover:underline"
+                >
+                  view courses
+                </button>
               </div>
+              
             ))}
           </div>
         </div>
