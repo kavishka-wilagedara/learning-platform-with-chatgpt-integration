@@ -29,7 +29,7 @@ An **online learning platform** built with the **MERN stack (MongoDB, Express, R
 - View posted courses with details  
 - View enrolled students for each course
 
-### GPT-3 Integration
+### Gemini API Integration
 Students can enter prompts like:
 ```
 "I want to be a software engineer, what courses should I follow?"
