@@ -1,4 +1,4 @@
-# Online Learning Platform with ChatGPT Integration
+# Online Learning Platform with Gemini-AI Integration
 
 An **online learning platform** built with the **MERN stack (MongoDB, Express, React, Node.js)**, featuring **user authentication, course management, student enrollment, and personalized course recommendations via GPT-3 API**. The application is fully deployable to cloud platforms and accessible via the Internet.  
 
@@ -20,7 +20,7 @@ An **online learning platform** built with the **MERN stack (MongoDB, Express, R
 - View all available courses with details  
 - Enroll in courses and see enrollment status  
 - View list of enrolled courses  
-- Receive personalized course recommendations from ChatGPT  
+- Receive personalized course recommendations from Gemini-AI  
 
 ### Instructor Features
 
@@ -35,14 +35,14 @@ Students can enter prompts like:
 "I want to be a software engineer, what courses should I follow?"
 
 ```
-Backend calls the OpenAI GPT-3 API to generate personalized course recommendations.
+Backend calls the Gemini API to generate personalized course recommendations.
 
 ## Tech Stack
 
 - **Backend:** Node.js, Express.js, MongoDB, Mongoose  
 - **Frontend:** React.js, Vite, Tailwind CSS
 - **Authentication:** JWT  
-- **AI Integration:** OpenAI GPT-3 API  
+- **AI Integration:** Gemini API  
 - **Hosting / Deployment:** AWS
 
 ---
