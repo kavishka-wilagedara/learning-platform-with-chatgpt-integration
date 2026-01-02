@@ -136,7 +136,7 @@ const updateCourseByInstructor = async(req, res) => {
         console.log("Update course id: ", courseId)
 
         // Validate course inputs
-        const error = validateCourseCreateOrUpdate(req.body)
+        const error = validateCourseCreateOrUpdate(req.body, true)
         if(error){
             return res.status(400).json({
                 success: false,
